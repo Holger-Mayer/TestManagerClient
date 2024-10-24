@@ -1,0 +1,16 @@
+<div class="container">
+    <h2 class="my-5">{{formTitle}}</h2>
+    <form [formGroup]="productForm" (ngSubmit)="onSubmit()">
+  
+      <mat-form-field class="example-full-width">
+        <mat-label>Product Name:</mat-label>
+        <input matInput placeholder="Product 1" formControlName="name">
+      </mat-form-field>
+  
+      <mat-form-field class="example-full-width">
+        <mat-label>Description:</mat-label>
+        <textarea matInput placeholder="Ex. It makes me feel..." formControlName="description"></textarea>
+      </mat-form-field>
+      <button mat-stroked-button type="submit">Submit</button>
+    </form>
+  </div>
