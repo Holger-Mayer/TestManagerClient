@@ -11,6 +11,7 @@
         <mat-label>Description:</mat-label>
         <textarea matInput  data-testid="description" placeholder="Ex. It makes me feel..." formControlName="description"></textarea>
       </mat-form-field>
-      <button mat-stroked-button type="submit">Submit</button>
+      <button mat-stroked-button type="submit"  [disabled]="!productForm.valid">Submit</button>
+      <button mat-stroked-button color="accent" (click)="onCancel()">Cancel</button>
     </form>
   </div>

@@ -1,11 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit ,Inject} from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ProductService } from '../product/product.service';
 import { Product } from '../product/product';
-import { Router, ActivatedRoute } from '@angular/router';
-import { MatFormField,MatLabel } from '@angular/material/form-field';
-import {MatButtonModule} from '@angular/material/button';
-
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-product-addedit',
@@ -17,10 +14,10 @@ export class ProductAddEditComponent {
   productForm: FormGroup = new FormGroup({});
   formTitle: string = "Add Product";
 
-  constructor(private formBuilder: FormBuilder,
-    private productService: ProductService,
-    private router: Router,
-    private activatedRoute: ActivatedRoute) { }
+  constructor(private dialogRef: MatDialogRef<ProductAddEditComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: Product,
+    private formBuilder: FormBuilder,
+    private productService: ProductService) { }
 
 
   ngOnInit(): void {
@@ -29,11 +26,11 @@ export class ProductAddEditComponent {
       description: ['', [Validators.required, Validators.required]]
     });
 
-    let id = this.activatedRoute.snapshot.paramMap.get('id');
+    let id = this.data.id;
 
     if (id) {
     this.formTitle = "Edit Product";
-      this.productService.getProduct(id).subscribe(product => {
+      this.productService.getProduct(Number(id)).subscribe(product => {
         if (product) {
           this.productForm.patchValue(product);
         }
@@ -48,15 +45,21 @@ export class ProductAddEditComponent {
       console.log("onSubmit: valid");
       let product: Product = this.productForm.value;
 
-      let id = this.activatedRoute.snapshot.paramMap.get('id');
+      let id = this.data.id;
       if (id) {
-        this.productService.updateProduct(id,product);
+        this.productService.updateProduct(Number(id),product);
       } else {
         this.productService.addProduct(product);
       }
 
+      this.dialogRef.close(product);
 
-      this.router.navigate(['/']);
+    
     }
+
+  }
+
+  onCancel(): void {
+    this.dialogRef.close();
   }
 }

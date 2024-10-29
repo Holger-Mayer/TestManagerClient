@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject,Observable, throwError } from 'rxjs';
-import {HttpClient, HttpErrorResponse} from '@angular/common/http';
-import {environment} from '../../environments/environment';
+import { BehaviorSubject, Observable, throwError } from 'rxjs';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { environment } from '../../environments/environment';
 import { Product } from './product';
 
 @Injectable({
@@ -14,8 +14,11 @@ export class ProductService {
   private productsSubject: BehaviorSubject<Product[]> = new BehaviorSubject<Product[]>([]);
   public products$: Observable<Product[]> = this.productsSubject.asObservable();
 
+  private selectedProductSubject = new BehaviorSubject<Product | null>(null);
+  selectedProduct$ = this.selectedProductSubject.asObservable();
+
   constructor(private http: HttpClient) {
-   
+
   }
 
   getProducts(): void {
@@ -24,40 +27,34 @@ export class ProductService {
     });
   }
 
+  getProductsPaged(page: number, size: number): Observable<any> {
 
-  getProduct(id: string) : Observable<Product> {
-    return this.http.get<Product>(this.entityUrl+"/"+id);
+   return this.http.get<any>(`${this.entityUrl}/paged?page=${page}&size=${size}`);
+   
   }
 
-  addProduct(product: Product) : void {
-  
-    this.http.post<Product>(this.entityUrl, product).subscribe(() => {
-      this.getProducts(); // Aktualisieren Sie die Produktliste nach dem Hinzufügen
-    });
+
+  getProduct(id: number): Observable<Product> {
+    return this.http.get<Product>(this.entityUrl + "/" + id);
   }
 
-  deleteProduct(id: Number): void {
-      this.http.delete<Product>(this.entityUrl+"/"+id).subscribe(() => {
-      this.getProducts(); 
-      });
+  addProduct(product: Product):  Observable<Product> {
+
+    return this.http.post<Product>(this.entityUrl, product)
   }
 
-  updateProduct(id: string, updatedProduct: Product) : void {
-    this.http.put<Product>(this.entityUrl+"/"+id, updatedProduct).subscribe(() => {
-      this.getProducts(); // Aktualisieren Sie die Produktliste nach dem Bearbeiten
-    });
+  deleteProduct(id: Number) : Observable<void> {
+    return this.http.delete<void>(this.entityUrl + "/" + id);
   }
 
-  private handleError(error: HttpErrorResponse) {
-    // Fehlerlogik hier anpassen, z.B. Nachrichten an den User
-    let errorMessage = 'Unknown error!';
-    if (error.error instanceof ErrorEvent) {
-      // Client-side error
-      errorMessage = `Error: ${error.error.message}`;
-    } else {
-      // Server-side error
-      errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
-    }
-    return throwError(errorMessage);
+  updateProduct(id: number, updatedProduct: Product):  Observable<Product>{
+    return this.http.put<Product>(this.entityUrl + "/" + id, updatedProduct);
+  }
+
+
+  setSelectedProduct(id: Number) {
+
+    let product = this.productsSubject.value.find(p => p.id === id) || null;
+    this.selectedProductSubject.next(product);
   }
 }
