@@ -4,6 +4,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HelloWorldComponent } from './hello-world/hello-world.component';
+import { NavigationMenuModule } from './navigation-menu/navigation-menu.module';
 import { ProductModule} from './product/product.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatInputModule} from '@angular/material/input';
@@ -20,6 +21,7 @@ import {MatButtonModule} from '@angular/material/button';
     AppRoutingModule,
     HttpClientModule,
     ProductModule,
+    NavigationMenuModule,
     BrowserAnimationsModule,
     MatInputModule,
     MatFormFieldModule,

@@ -1,4 +1,4 @@
-import { Component, OnInit,ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ProductService } from '../product/product.service';
 import { Product } from '../product/product';
 import { ProductAddEditComponent } from '../product-addedit/product-addedit.component';
@@ -21,12 +21,12 @@ export class ProductListComponent implements OnInit {
     private router: Router) { }
 
 
-    @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-    dataSource = new MatTableDataSource<Product>();
-   pageSize = 10;
-   pageIndex = 0;
-   totalItems = 0;
+  dataSource = new MatTableDataSource<Product>();
+  pageSize = 10;
+  pageIndex = 0;
+  totalItems = 0;
 
   displayedColumns: string[] = ['name', 'actions'];
 
@@ -34,7 +34,7 @@ export class ProductListComponent implements OnInit {
   ngOnInit(): void {
     this.loadProducts();
   }
-  
+
   loadProducts() {
 
     this.productService.getProductsPaged(this.pageIndex, this.pageSize).subscribe(data => {
@@ -78,12 +78,11 @@ export class ProductListComponent implements OnInit {
   }
 
 
-  openProductDashboard(id: number) {
-    
-  
-    this.productService.setSelectedProduct(id);
-    
-    this.router.navigate(['/dashboard', id]);
+  openProductDashboard(product:Product) {
+;
+    this.productService.setSelectedProduct(product);
+
+    this.router.navigate(['/dashboard', product.id]);
 
 
   }

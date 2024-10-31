@@ -18,12 +18,12 @@ export class ProductAddEditComponent {
     @Inject(MAT_DIALOG_DATA) public data: Product,
     private formBuilder: FormBuilder,
     private productService: ProductService) { }
-
+ 
 
   ngOnInit(): void {
     this.productForm = this.formBuilder.group({
-      name: ['', Validators.required],
-      description: ['', [Validators.required, Validators.required]]
+      name: ['', Validators.compose([Validators.required, Validators.pattern('[a-zA-Z].[a-zA-Z0-9 ]*')])],
+      description: ['', Validators.required]
     });
 
     let id = this.data.id;

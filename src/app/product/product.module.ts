@@ -12,17 +12,18 @@ import {MatInputModule} from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatTableModule} from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
-import { MatSortModule } from '@angular/material/sort';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatSortModule } from '@angular/material/sort';
 import { ProductComponent } from './product.component';
-
+import { NavigationMenuModule } from '../navigation-menu/navigation-menu.module';
 
 
 @NgModule({
   declarations: [
     ProductListComponent,
     ProductAddEditComponent,
-    ProductComponent
+    ProductComponent,
   ],
   imports: [
     CommonModule,
@@ -37,6 +38,9 @@ import { ProductComponent } from './product.component';
     MatPaginatorModule,
     MatSortModule,
     MatDialogModule,
+    MatSortModule,
+    MatProgressSpinnerModule,
+    NavigationMenuModule
   ],
   providers: [
     ProductService

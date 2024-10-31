@@ -14,16 +14,14 @@ export class ProductComponent {
   constructor(private productService: ProductService) { }
 
   ngOnInit() {
-    this.productService.selectedProduct$.subscribe(product => {
-      this.selectedProduct = product;
-      if (product != null) {
-        this.productName = product.name;
-        this.productDescription = product.description;
+    this.selectedProduct = this.productService.getSelectedProduct();
+
+      if (this.selectedProduct != null) {
+        this.productName = this.selectedProduct.name;
+        this.productDescription = this.selectedProduct.description;
       } 
 
     
-    });
-
-  }
+    }
 
 }

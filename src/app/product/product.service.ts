@@ -14,11 +14,10 @@ export class ProductService {
   private productsSubject: BehaviorSubject<Product[]> = new BehaviorSubject<Product[]>([]);
   public products$: Observable<Product[]> = this.productsSubject.asObservable();
 
-  private selectedProductSubject = new BehaviorSubject<Product | null>(null);
-  selectedProduct$ = this.selectedProductSubject.asObservable();
+  private selectedProduct : Product | null;
 
   constructor(private http: HttpClient) {
-
+    this.selectedProduct = null;
   }
 
   getProducts(): void {
@@ -52,9 +51,14 @@ export class ProductService {
   }
 
 
-  setSelectedProduct(id: Number) {
+  setSelectedProduct(product: Product) {
 
-    let product = this.productsSubject.value.find(p => p.id === id) || null;
-    this.selectedProductSubject.next(product);
+    this.selectedProduct = product;
+
   }
+
+  getSelectedProduct(): Product | null {
+    return this.selectedProduct;
+  }
+
 }
