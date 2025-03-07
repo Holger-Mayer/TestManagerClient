@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { ProductEditPage } from './pages/ProductEditPage';
 
 test.beforeEach(async ({ page }) => {
   await page.goto('http://localhost:4200/');
@@ -15,25 +16,51 @@ test.describe('Structure Tests', () => {
 
 test.describe('CRUD', () => {
 
-  test('Create', async ({ page }) => {
+    // TODO: Remove Product via API
+    // TODO : Use Faker-Library für Name und Description
+   
+
+  test('create via page object', async ({ page }) => {
+    const testName = 'Test Product';
+    const testName2 = 'Alpha 1';
+
+    await page.click('text=Add Product');
+
+    const productEditPage = new ProductEditPage(page);
+
+    await productEditPage.setName(testName);
+    await productEditPage.setDescription("Dies ist ein Hugo");
+    await productEditPage.doSave();
+
+    await expect(page.locator('table')).toContainText(testName);
+
+     // Finaly remove the new entry
+     const drow = page.locator(`table tr:has-text("${testName}")`);
+     await drow.locator('button:has-text("Delete")').click();
+
+
+  });
+
+  test('Edit via page object', async ({ page }) => {
 
     const testName = 'Test Product';
     const testName2 = 'Alpha 1';
 
     await page.click('text=Add Product');
-    await page.getByPlaceholder('Product 1').fill(testName);
-    await page.getByPlaceholder('Ex. It makes me feel...').fill('Dies sind 10 Hugos');
-    await page.click('text=Submit');
+
+    const productAddPage = new ProductEditPage(page);
+
+    await productAddPage.setName(testName);
+    await productAddPage.setDescription("Dies ist ein Hugo");
+    await productAddPage.doSave();
 
     await expect(page.locator('table')).toContainText(testName);
 
     const erow = page.locator(`table tr:has-text("${testName}")`);
     await erow.locator('button:has-text("Edit")').click();
 
-    const inputField = page.getByTestId('name');
-    await inputField.fill(testName2);
-
-    await page.click('text=Submit');
+    await productAddPage.setName(testName2);
+    await productAddPage.doSave();
 
     await expect(page.locator('table')).toContainText(testName2);
 

@@ -6,6 +6,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
+import { MatSort } from '@angular/material/sort';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-product-list',
@@ -18,15 +20,24 @@ export class ProductListComponent implements OnInit {
 
   constructor(private productService: ProductService,
     private dialog: MatDialog,
-    private router: Router) { }
+    private router: Router) { 
 
+
+  }
+
+
+// TODO: Seite direkt in Inputfeld eingeben
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild(MatSort) sort!: MatSort;
+  searchKeywordFilter = new FormControl();
 
   dataSource = new MatTableDataSource<Product>();
   pageSize = 10;
   pageIndex = 0;
   totalItems = 0;
+  sortDirection = 'asc';
+
 
   displayedColumns: string[] = ['name', 'actions'];
 
@@ -35,14 +46,34 @@ export class ProductListComponent implements OnInit {
     this.loadProducts();
   }
 
-  loadProducts() {
+  ngAfterViewInit(): void {
+    // Reagiere auf Paginierungsereignisse
+    this.paginator.page.subscribe(() => {
+      this.pageIndex = this.paginator.pageIndex;
+      this.pageSize = this.paginator.pageSize;
+      this.loadProducts();
+    });
 
-    this.productService.getProductsPaged(this.pageIndex, this.pageSize).subscribe(data => {
+    // Reagiere auf Sortierereignisse
+    this.sort.sortChange.subscribe(() => {
+      console.log("Change sort order to " + this.sort.direction)
+      this.sortDirection = this.sort.direction;
+      this.loadProducts();
+    });
+  }
+
+  loadProducts() {
+   
+    var filterValue = this.searchKeywordFilter.value == null ? '' : this.searchKeywordFilter.value;
+    this.productService.getProductsPagedSortedAndFiltered(filterValue,this.sortDirection,this.pageIndex, this.pageSize).subscribe(data => {
       this.dataSource.data = data.content;
+      console.log(data);
       this.totalItems = data.totalElements;
     });
 
   }
+
+ 
 
   onPageChange(event: any) {
     this.pageIndex = event.pageIndex;
@@ -85,5 +116,16 @@ export class ProductListComponent implements OnInit {
     this.router.navigate(['/dashboard', product.id]);
 
 
+  }
+
+  applyFilter(event: Event) {
+     const filterValue = (event.target as HTMLInputElement).value;
+     console.log("filter - " + filterValue);
+ 
+    this.productService.getProductsPagedSortedAndFiltered(filterValue,this.sortDirection,this.pageIndex, this.pageSize).subscribe(data => {
+      this.dataSource.data = data.content;
+      console.log(data);
+      this.totalItems = data.totalElements;
+    });
   }
 }

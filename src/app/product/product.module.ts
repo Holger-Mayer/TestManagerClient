@@ -6,7 +6,6 @@ import { RouterModule } from '@angular/router';
 import { ProductListComponent } from '../product-list/product-list.component';
 import { ProductAddEditComponent } from '../product-addedit/product-addedit.component';
 import { ProductService } from './product.service';
-import {MatIconModule} from '@angular/material/icon';
 import {MatButtonModule} from '@angular/material/button';
 import {MatInputModule} from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
@@ -16,14 +15,13 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSortModule } from '@angular/material/sort';
 import { ProductComponent } from './product.component';
-import { NavigationMenuModule } from '../navigation-menu/navigation-menu.module';
+
 
 
 @NgModule({
   declarations: [
     ProductListComponent,
-    ProductAddEditComponent,
-    ProductComponent,
+    ProductAddEditComponent
   ],
   imports: [
     CommonModule,
@@ -33,14 +31,13 @@ import { NavigationMenuModule } from '../navigation-menu/navigation-menu.module'
     MatFormFieldModule, 
     MatInputModule,  
     MatButtonModule, 
-    MatIconModule,
     MatTableModule, 
     MatPaginatorModule,
     MatSortModule,
     MatDialogModule,
     MatSortModule,
-    MatProgressSpinnerModule,
-    NavigationMenuModule
+    MatProgressSpinnerModule
+
   ],
   providers: [
     ProductService

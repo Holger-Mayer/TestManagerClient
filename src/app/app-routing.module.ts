@@ -4,6 +4,7 @@ import { ProductListComponent } from './product-list/product-list.component';
 import { ProductAddEditComponent } from './product-addedit/product-addedit.component';
 import { ProductComponent } from './product/product.component';
 
+
 const routes: Routes = [
   {path: '', component: ProductListComponent},
   {path:"newProduct" , component:ProductAddEditComponent},
