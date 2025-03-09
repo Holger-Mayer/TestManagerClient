@@ -110,11 +110,10 @@ export class ProductListComponent implements OnInit {
 
 
   openProductDashboard(product:Product) {
-;
-    this.productService.setSelectedProduct(product);
 
-    this.router.navigate(['/dashboard', product.id]);
+    localStorage.setItem('selectedProduct', JSON.stringify(product));
 
+    this.router.navigate(['/dashboard']);
 
   }
 
